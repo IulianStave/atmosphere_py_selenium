@@ -15,8 +15,8 @@ TESTS = [
 
 parser = common.build_cmd_arguments()
 args = parser.parse_args()
-driver = common.get_browser(args.browser)
-resolution = (args.screenwidth, args.screenheight) 
+driver = common.get_browser(args.browser, args.headless, args.browserpath)
+resolution = (args.screenwidth, args.screenheight)
 driver.set_window_size(*resolution)
 
 

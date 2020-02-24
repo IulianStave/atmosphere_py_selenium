@@ -3,6 +3,8 @@ import unittest
 import argparse
 from selenium.webdriver.remote.webdriver import WebDriver
 from selenium import webdriver
+from selenium.webdriver.chrome.options import Options as ChromeOptions
+from selenium.webdriver.firefox.options import Options as FirefoxOptions
 
 
 DRIVERS = {
@@ -15,10 +17,21 @@ DRIVERS = {
 }
 
 
-def get_browser(name, path=None):
-    # browser = DRIVERS[name]
-    # return browser(executable_path=path) if path else browser()
-    return DRIVERS[name]()
+HEADLESS_OPTIONS = {
+    'chrome': ChromeOptions,
+    'firefox': FirefoxOptions
+}
+
+
+def get_browser(name, RunHeadless=False, path=None):
+    browser = DRIVERS[name]
+    if RunHeadless:
+        options = HEADLESS_OPTIONS[name]()
+        options.add_argument("--headless")
+        if path:
+            return browser(options=options, executable_path=path)
+        return browser(options=options)
+    return browser(executable_path=path) if path else browser()
 
 
 def build_cmd_arguments() -> argparse.ArgumentParser:
@@ -40,10 +53,10 @@ def build_cmd_arguments() -> argparse.ArgumentParser:
     parser.add_argument(
         '-V', '--verbose', action='count', default=1,
         help='Verbosity. Default: 1'
-        )
+    )
     parser.add_argument(
-        '-B', '--browser', default='firefox',
-        help='Browser to use, known: "{}". Default: firefox'.format(
+        '-B', '--browser', default='chrome',
+        help='Browser to use, known: "{}". Default: chrome'.format(
             ', '.join(DRIVERS.keys())
         )
     )
@@ -62,6 +75,10 @@ def build_cmd_arguments() -> argparse.ArgumentParser:
         help='Screen height. Default: 768.'
     )
 
+    parser.add_argument(
+        '-H', '--headless', action='store_true',
+        help='Run headless mode'
+    )
     return parser
 
 
@@ -70,13 +87,10 @@ class BrowserTestCase(unittest.TestCase):
         Needed to support the browser
     """
     driver = None
-    # url = None
 
-    # def __init__(self, methodName, browser: WebDriver, url: str):
     def __init__(self, methodName, driver: WebDriver):
         super().__init__(methodName)
         self.driver = driver
-        # self.url = url
 
     @classmethod
     def my_tests(cls):
@@ -84,7 +98,7 @@ class BrowserTestCase(unittest.TestCase):
         """
         return unittest.defaultTestLoader.getTestCaseNames(cls)
 
-    def screenshot(self, suffix: str = ''):
+    def screenshot(self, suffix: str=''):
         """ Capture a screeenshot.
             Uses `suffix` if given or the current browser url.
         """
