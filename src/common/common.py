@@ -5,7 +5,7 @@ from selenium.webdriver.remote.webdriver import WebDriver
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-
+from src.data.TestData import TestData
 
 DRIVERS = {
     'chrome': webdriver.Chrome,
@@ -44,12 +44,10 @@ def build_cmd_arguments() -> argparse.ArgumentParser:
             'edge: MicrosoftWebDriver.exe.'
         )
     )
-    """
     parser.add_argument(
-        'url', type=str, nargs='?',
+        '-U', '--url', type=str,
         help='Site url, eg: https://atmoshpere.copernicus.eu'
     )
-    """
     parser.add_argument(
         '-V', '--verbose', action='count', default=1,
         help='Verbosity. Default: 1'
@@ -87,10 +85,12 @@ class BrowserTestCase(unittest.TestCase):
         Needed to support the browser
     """
     driver = None
+    url = None
 
-    def __init__(self, methodName, driver: WebDriver):
+    def __init__(self, methodName, driver: WebDriver, url: str):
         super().__init__(methodName)
         self.driver = driver
+        self.url = url
 
     @classmethod
     def my_tests(cls):
