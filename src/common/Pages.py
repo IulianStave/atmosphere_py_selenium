@@ -2,20 +2,18 @@ from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.common.action_chains import ActionChains
 
-from src.data.TestData import TestData
-from src.data.Locators import Locators
-
 
 TIMEOUT = 20
 
 
-class BasePage():
+class HomePage():
     """ Contains all common elements and functionalities
         available to all pages.
     """
 
-    def __init__(self, driver):
+    def __init__(self, driver, url):
         self.driver = driver
+        self.driver.get(url)
 
     def click(self, by_locator):
         """ Clicks on the web element identified by locator passed to it"""
@@ -79,8 +77,9 @@ class BasePage():
         self.driver.switch_to.window(window_after)
 
 
+"""
 class HomePage(BasePage):
-    """Home Page"""
+    # Home Page
 
     def __init__(self, driver, url):
         super().__init__(driver)
@@ -91,3 +90,4 @@ class HomePage(BasePage):
         self.driver.find_element(*Locators.SEARCH_INPUT).clear()
         self.enter_text(Locators.SEARCH_INPUT, TestData.SEARCH_TEXT_ATM)
         self.click(Locators.SEARCH_SUBMIT_BUTTON)
+"""
