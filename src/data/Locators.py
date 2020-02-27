@@ -17,3 +17,12 @@ class Locators():
     CATALOGUE_PRODUCTS = (By.CLASS_NAME, 'product-details')
     TOP_PRODUCT = (By.CSS_SELECTOR, 'div.product-details > h3 > a')
     CATALOGUE_IMG = (By.CSS_SELECTOR, 'div.item-box > div.item-image > img')
+    # Data locators
+    DATA_LINK = (By.LINK_TEXT, 'DATA')
+    DATA_COOKIES_CONSENT = (By.CLASS_NAME,
+                            'agree-button.eu-cookie-compliance-agree-button')
+    DATA_SEARCH_INPUT = (By.CSS_SELECTOR, 'input#cdsappSearch')
+    CATALOGUE_LINK = (By.LINK_TEXT, 'Access the catalogue')
+    # Charts locators
+    CHARTS_LINK = (By.LINK_TEXT, 'Reactive gases')
+    CHART_IMAGE = (By.CSS_SELECTOR, 'div.chart-clip > img.chart-image')
